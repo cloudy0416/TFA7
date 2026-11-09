@@ -1,44 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Customer Accounts</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Customer Accounts</h1>
+@section('title', 'Customer Accounts')
 
-@if(session('success'))
-    <p style="color: green;">{{ session('success') }}</p>
-@endif
+@section('content')
 
-<a href="{{ route('customers.create') }}">Create Customer</a>
+<div class="page-header">
+    <h1>Customer Accounts</h1>
+    <p>Manage and organize your customer information.</p>
+</div>
 
-<br><br>
+<div class="table-card">
 
-<table border="1" cellpadding="10">
-    <tr>
-        <th>ID</th>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Action</th>
-    </tr>
+    <a href="{{ route('customers.create') }}" class="btn btn-primary">
+        + Create Customer
+    </a>
 
-    @foreach($customers as $customer)
-    <tr>
-        <td>{{ $customer->id }}</td>
-        <td>{{ $customer->full_name }}</td>
-        <td>{{ $customer->email }}</td>
-        <td>{{ $customer->phone }}</td>
-        <td>
-            <a href="{{ route('customers.edit', $customer->id) }}">Edit</a>
-        </td>
-    </tr>
-    @endforeach
-</table>
+    <br><br>
 
-<br>
-<a href="{{ route('users.index') }}">User Accounts</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-</body>
-</html>
+        <tbody>
+            @forelse($customers as $customer)
+                <tr>
+                    <td>{{ $customer->id }}</td>
+                    <td>{{ $customer->full_name }}</td>
+                    <td>{{ $customer->email }}</td>
+                    <td>{{ $customer->phone }}</td>
+                    <td>
+                        <a href="{{ route('customers.edit', $customer->id) }}"
+                           class="submit-btn">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" style="text-align: center;">
+                        No customer records found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+</div>
+
+@endsection

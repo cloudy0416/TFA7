@@ -1,42 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Customer</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Edit Customer</h1>
+@section('title', 'Edit Customer')
 
-@if($errors->any())
-    @foreach($errors->all() as $error)
-        <p style="color: red;">{{ $error }}</p>
-    @endforeach
-@endif
+@section('content')
 
-<form action="{{ route('customers.update', $customer->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+<div class="page-header">
+    <h1>Edit Customer</h1>
+    <p>Update the customer's information.</p>
+</div>
 
-    <label>Full Name:</label>
-    <input type="text" name="full_name"
-        value="{{ old('full_name', $customer->full_name) }}">
-    <br><br>
+<div class="form-card">
 
-    <label>Email:</label>
-    <input type="email" name="email"
-        value="{{ old('email', $customer->email) }}">
-    <br><br>
+    @if($errors->any())
+        <div class="error-message">
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
 
-    <label>Phone:</label>
-    <input type="text" name="phone"
-        value="{{ old('phone', $customer->phone) }}">
-    <br><br>
+    <form action="{{ route('customers.update', $customer->id) }}"
+          method="POST">
 
-    <button type="submit">Update Customer</button>
-</form>
+        @csrf
+        @method('PUT')
 
-<br>
-<a href="{{ route('customers.index') }}">Back</a>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="full_name"
+                value="{{ old('full_name', $customer->full_name) }}"
+                required
+            >
+        </div>
 
-</body>
-</html>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input
+                type="email"
+                name="email"
+                value="{{ old('email', $customer->email) }}"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input
+                type="text"
+                name="phone"
+                value="{{ old('phone', $customer->phone) }}"
+            >
+        </div>
+
+        <button type="submit">Update Customer</button>
+
+        <a href="{{ route('customers.index') }}" class="btn btn-outline">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+@endsection

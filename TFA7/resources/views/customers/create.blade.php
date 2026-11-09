@@ -1,38 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Customer</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Create Customer</h1>
+@section('title', 'Create Customer')
 
-@if($errors->any())
-    @foreach($errors->all() as $error)
-        <p style="color: red;">{{ $error }}</p>
-    @endforeach
-@endif
+@section('content')
 
-<form action="{{ route('customers.store') }}" method="POST">
-    @csrf
+<div class="page-header">
+    <h1>Create Customer</h1>
+    <p>Add a new customer to your POS system.</p>
+</div>
 
-    <label>Full Name:</label>
-    <input type="text" name="full_name" value="{{ old('full_name') }}">
-    <br><br>
+<div class="form-card">
 
-    <label>Email:</label>
-    <input type="email" name="email" value="{{ old('email') }}">
-    <br><br>
+    @if($errors->any())
+        <div class="error-message">
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
 
-    <label>Phone:</label>
-    <input type="text" name="phone" value="{{ old('phone') }}">
-    <br><br>
+    <form action="{{ route('customers.store') }}" method="POST">
+        @csrf
 
-    <button type="submit">Save Customer</button>
-</form>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="full_name"
+                placeholder="Enter full name"
+                value="{{ old('full_name') }}"
+                required
+            >
+        </div>
 
-<br>
-<a href="{{ route('customers.index') }}">Back</a>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email address"
+                value="{{ old('email') }}"
+                required
+            >
+        </div>
 
-</body>
-</html>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input
+                type="text"
+                name="phone"
+                placeholder="Enter phone number"
+                value="{{ old('phone') }}"
+            >
+        </div>
+
+        <button type="submit">Save Customer</button>
+
+        <a href="{{ route('customers.index') }}" class="btn btn-outline">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+@endsection

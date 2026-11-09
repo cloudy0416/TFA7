@@ -4,9 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 
+// HOME PAGE
 Route::get('/', function () {
-    return redirect()->route('customers.index');
-});
+    return view('home');
+})->name('home');
+
+// ABOUT PAGE
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
 // CUSTOMER ROUTES
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');

@@ -1,59 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit User</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Edit User</h1>
+@section('title', 'Edit User')
 
-@if($errors->any())
-    @foreach($errors->all() as $error)
-        <p style="color: red;">{{ $error }}</p>
-    @endforeach
-@endif
+@section('content')
 
-<form action="{{ route('users.update', $user->id) }}"
-      method="POST"
-      enctype="multipart/form-data">
+<div class="page-header">
+    <h1>Edit User</h1>
+    <p>Update user information and profile picture.</p>
+</div>
 
-    @csrf
-    @method('PUT')
+<div class="form-card">
 
-    <label>Username:</label>
-    <input type="text" name="username"
-        value="{{ old('username', $user->username) }}">
-    <br><br>
-
-    <label>Full Name:</label>
-    <input type="text" name="full_name"
-        value="{{ old('full_name', $user->full_name) }}">
-    <br><br>
-
-    <label>Current Avatar:</label>
-    <br>
-
-    @if($user->avatar)
-        <img src="{{ asset('storage/' . $user->avatar) }}"
-             width="120" height="120"
-             style="object-fit: cover; border-radius: 50%;">
-    @else
-        <img src="{{ asset('images/avatar-placeholder.png') }}"
-             width="120" height="120">
+    @if($errors->any())
+        <div class="error-message">
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
     @endif
 
-    <br><br>
+    <form action="{{ route('users.update', $user->id) }}"
+          method="POST"
+          enctype="multipart/form-data">
 
-    <label>Upload New Avatar:</label>
-    <input type="file" name="avatar" accept="image/*">
+        @csrf
+        @method('PUT')
 
-    <p>Maximum file size: 2MB.</p>
+        <div class="form-group">
+            <label>Username</label>
+            <input
+                type="text"
+                name="username"
+                value="{{ old('username', $user->username) }}"
+                required
+            >
+        </div>
 
-    <button type="submit">Update User</button>
-</form>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="full_name"
+                value="{{ old('full_name', $user->full_name) }}"
+                required
+            >
+        </div>
 
-<br>
-<a href="{{ route('users.index') }}">Back</a>
+        <div class="form-group">
+            <label>Current Profile Picture</label>
+            <br><br>
 
-</body>
-</html>
+            @if($user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar))
+                <img
+                    src="{{ asset('storage/' . $user->avatar) }}"
+                    alt="Current Avatar"
+                    width="120"
+                    height="120"
+                    style="object-fit: cover; border-radius: 50%;"
+                >
+            @else
+                <img
+                    src="{{ asset('images/avatar-placeholder.png') }}"
+                    alt="Default Avatar"
+                    width="120"
+                    height="120"
+                    style="object-fit: cover; border-radius: 50%;"
+                >
+            @endif
+        </div>
+
+        <div class="form-group">
+            <label>Upload New Profile Picture</label>
+            <input
+                type="file"
+                name="avatar"
+                accept="image/jpeg,image/png,image/webp"
+            >
+
+            <small>Accepted formats: JPG, JPEG, PNG, WEBP. Maximum size: 2MB.</small>
+        </div>
+
+        <button type="submit">Update User</button>
+
+        <a href="{{ route('users.index') }}" class="btn btn-outline">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+@endsection
